@@ -12,7 +12,7 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #fff0f3;
+            background-color: #f0f4ff; /* 稍微調整底色配星星 */
             margin: 0;
             overflow: hidden;
             font-family: "Microsoft JhengHei", sans-serif;
@@ -37,13 +37,14 @@
             left: 0;
         }
 
-        .heart-outline {
-            stroke: #ff4d6d;
+        .shape-outline {
+            stroke: #ffd700; /* 星星改為金色 */
             stroke-width: 6;
             fill: transparent;
-            stroke-dasharray: 1200;
-            stroke-dashoffset: 1200;
+            stroke-dasharray: 1500;
+            stroke-dashoffset: 1500;
             stroke-linecap: round;
+            stroke-linejoin: round;
             animation: drawOutline 3s forwards ease-in-out;
         }
 
@@ -51,56 +52,55 @@
             to { stroke-dashoffset: 0; }
         }
 
-        .heart-fill {
-            fill: #ff758f;
+        .shape-fill {
+            fill: #ffea00;
             opacity: 0;
             transform-origin: center;
             transform: scale(0);
         }
 
-        .heart-fill.animate {
+        .shape-fill.animate {
             animation: pulseExpand 2s infinite ease-out;
         }
 
         @keyframes pulseExpand {
             0% { transform: scale(0); opacity: 0.8; }
-            70% { transform: scale(1); opacity: 0.4; }
-            100% { transform: scale(1); opacity: 0; }
+            70% { transform: scale(1.1); opacity: 0.4; }
+            100% { transform: scale(1.2); opacity: 0; }
         }
 
-        .heart-solid {
-            fill: #ff758f;
+        .shape-solid {
+            fill: #ffd700;
             opacity: 0;
             transform-origin: center;
             transition: opacity 1s ease;
         }
 
-        .heart-solid.show {
-            opacity: 0.8;
+        .shape-solid.show {
+            opacity: 0.9;
             animation: colorShift 6s infinite alternate ease-in-out;
         }
 
         @keyframes colorShift {
-            0% { fill: #ff758f; }
-            50% { fill: #c8b6ff; }
-            100% { fill: #ffd6a5; }
+            0% { fill: #ffd700; }
+            50% { fill: #ffb700; }
+            100% { fill: #ff9500; }
         }
 
-        /* 修改後的兩行文字樣式 */
         .text-group {
             position: absolute;
-            top: 48%;
+            top: 52%; /* 稍微下調一點，星星中心視覺上較低 */
             left: 50%;
             transform: translate(-50%, -50%);
-            color: white;
+            color: #5d4037;
             opacity: 0;
             z-index: 20;
-            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+            text-shadow: 1px 1px 5px rgba(255, 255, 255, 0.8);
             text-align: center;
             width: 100%;
             display: flex;
             flex-direction: column;
-            gap: 10px; /* 兩行文字的間距 */
+            gap: 10px;
         }
 
         .text-group.show {
@@ -132,18 +132,18 @@
             bottom: 20px;
             font-family: 'Dancing Script', cursive;
             font-size: 24px;
-            color: #ff4d6d;
+            color: #ffb700;
             opacity: 0;
             z-index: 30;
         }
 
         .signature.show { opacity: 0.8; transition: opacity 2s; }
 
-        .bg-heart { position: fixed; color: #ff4d6d; z-index: 1; pointer-events: none; animation: floatUp 4s forwards ease-in; }
+        .bg-star { position: fixed; color: #ffd700; z-index: 1; pointer-events: none; animation: floatUp 4s forwards ease-in; }
         @keyframes floatUp {
-            0% { opacity: 0; transform: translateY(0) scale(0.5); }
+            0% { opacity: 0; transform: translateY(0) rotate(0deg); }
             20% { opacity: 0.6; }
-            100% { opacity: 0; transform: translateY(-100px) scale(1.2); }
+            100% { opacity: 0; transform: translateY(-100px) rotate(90deg); }
         }
 
         .particle { position: absolute; pointer-events: none; z-index: 100; animation: popOut 1s forwards ease-out; font-size: 26px; }
@@ -160,16 +160,16 @@
     <div class="container">
         <svg viewBox="0 0 400 400" preserveAspectRatio="xMidYMid meet">
             <defs>
-                <path id="heartPath" d="M 200,120 C 200,120 150,50 80,50 C 20,50 20,140 20,140 C 20,220 200,350 200,350 C 200,350 380,220 380,140 C 380,140 380,50 320,50 C 250,50 200,120 200,120"></path>
+                <path id="starPath" d="M 200,40 L 247,145 L 360,155 L 275,230 L 300,340 L 200,285 L 100,340 L 125,230 L 40,155 L 153,145 Z"></path>
             </defs>
-            <use href="#heartPath" class="heart-solid" id="solidFill" />
-            <use href="#heartPath" class="heart-fill" id="expandingFill" />
-            <use href="#heartPath" class="heart-outline" id="outline" />
+            <use href="#starPath" class="shape-solid" id="solidFill" />
+            <use href="#starPath" class="shape-fill" id="expandingFill" />
+            <use href="#starPath" class="shape-outline" id="outline" />
         </svg>
         
         <div id="textGroup" class="text-group">
             <div class="line1">米果寶貝</div>
-            <div class="line2">三月快樂💖</div>
+            <div class="line2">三月快樂✨</div>
         </div>
         
         <div id="clickArea"></div>
@@ -191,7 +191,7 @@
                 solidFill.classList.add('show');
                 textGroup.classList.add('show');
                 signature.classList.add('show');
-                startBgHearts();
+                startBgStars();
             }, 500);
         });
 
@@ -200,7 +200,7 @@
             for (let i = 0; i < 10; i++) {
                 const p = document.createElement('div');
                 p.className = 'particle';
-                p.innerText = ['❤️', '💖', '✨'][Math.floor(Math.random() * 3)];
+                p.innerText = ['⭐', '✨', '🌟'][Math.floor(Math.random() * 3)];
                 p.style.left = e.clientX + 'px';
                 p.style.top = e.clientY + 'px';
                 const angle = Math.random() * Math.PI * 2, dist = 60 + Math.random() * 80;
@@ -211,11 +211,11 @@
             }
         });
 
-        function startBgHearts() {
+        function startBgStars() {
             setInterval(() => {
                 const bh = document.createElement('div');
-                bh.className = 'bg-heart';
-                bh.innerText = '❤️';
+                bh.className = 'bg-star';
+                bh.innerText = '⭐';
                 bh.style.left = Math.random() * 100 + 'vw';
                 bh.style.top = Math.random() * 100 + 'vh';
                 bh.style.fontSize = (Math.random() * 10 + 10) + 'px';
@@ -225,5 +225,4 @@
         }
     </script>
 </body>
-
 </html>
